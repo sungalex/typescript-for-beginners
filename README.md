@@ -186,9 +186,17 @@ console.log(sayHi(alex));
 
 ## 5. Blockchain Creating a Block
 
-Block Structure를 `class`로 선언
+- Hash 생성을 위한 `crypto-js` 패키지 설치
+
+```zsh
+yarn add crypto-js
+```
+
+- import `crypto-js` and Block Structure를 `class`로 선언
 
 ```typescript
+import * as CryptoJS from 'crypto-js';
+
 // Block Structure
 class Block {
   public index: number;
@@ -210,18 +218,15 @@ class Block {
     this.timestamp = timestamp;
   }
 }
+```
 
-// create Block instance
-const genesisBlock: Block = new Block(
-  0,
-  '20210825032112345',
-  '',
-  'Hello',
-  Date.now()
-);
+```typescript
+// Create first Block instance
+const genesisBlock: Block = new Block(0, '202108250321', '', 'Hello', 12342345);
 
-// create blockchain as Block Array Type
-let blockchain: [Block] = [genesisBlock];
-
-console.log(blockchain);
+// blockchain Array and Functions for blockchain manipulate
+let blockchain: Block[] = [genesisBlock];
+const getBlockchain = (): Block[] => blockchain;
+const getLatestBlock = (): Block => blockchain[blockchain.length - 1];
+const getNewTimestamp = (): number => Math.round(new Date().getTime() / 1000);
 ```
