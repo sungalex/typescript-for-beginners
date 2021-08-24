@@ -259,9 +259,9 @@ const getHashForBlock = (block: Block): string =>
 ```typescript
 const genesisBlock: Block = new Block(
   0,
-  Block.calculateBlockHash(0, '', 'First Block', getNewTimestamp()),
+  Block.calculateBlockHash(0, '', 'Root Block', getNewTimestamp()),
   '',
-  'First Block',
+  'Root Block',
   getNewTimestamp()
 );
 ```
@@ -288,6 +288,7 @@ const createNewBlock = (data: string): Block => {
     data,
     newTimestamp
   );
+  addBlock(newBlock);
   return newBlock;
 };
 ```
@@ -315,8 +316,9 @@ const addBlock = (candidateBlock: Block): void => {
   }
 };
 
-addBlock(createNewBlock('Hello'));
-addBlock(createNewBlock('Bye Bye'));
+createNewBlock('Second Block');
+createNewBlock('Third Block');
+createNewBlock('Fourth Block');
 
 const getBlockchain = (): Block[] => blockchain;
 
