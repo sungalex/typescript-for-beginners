@@ -2,6 +2,8 @@
 
 Learning Typescript by making a Blockchain with it
 
+- 노마드코더 강의 : [Typescript로 블록체인 만들기](https://nomadcoders.co/typescript-for-beginners)
+
 ## 1. Typescript setup
 
 - Inintial setup
@@ -112,4 +114,37 @@ console.log(sayHi('Alex', 54, 'male'));
  * 모듈당 하나의 default export만 가능합니다.
  */
 export {};
+```
+
+## 3. Interfaces on Typescript
+
+`interface` 선언을 이용하여 `Object` 이름 지어주기
+
+```typescript
+/**
+ * interface 선언 (interface에 포함된 속성 이름과 속성별 Type 지정)
+ */
+interface Human {
+  name: string;
+  age: number;
+  gender: string;
+}
+
+// person Object 생성
+const person = {
+  name: 'Alex',
+  age: 54,
+  gender: 'male',
+};
+
+/**
+ * 변수명과 함수명에 Type을 지정하여 ts가 자동으로 오류를 체크하도록 함
+ * 함수의 파라미터 Type을 Human interface로 지정하고,
+ * 함수 호출 시 Human interface와 동일한 속성을 가진 Object를 인수로 전달
+ */
+const sayHi = (person: Human): string => {
+  return `Hello ${person.name}, you are ${person.age}, you are ${person.gender}!`;
+};
+
+console.log(sayHi(person));
 ```
