@@ -47,7 +47,7 @@ yarn add global typescript
 tsc
 ```
 
-- `yarn start`로 실행하기 위한 `package.json`에 설정 추가하여, `yarn start`로 실행
+- `tsc` 컴파일 및 `index.js` 파일 실행을 자동화 하기 위해 `package.json`에 설정 추가 (`yarn start`로 실행)
 
 ```JSON
 {
