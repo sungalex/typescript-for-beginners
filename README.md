@@ -192,11 +192,15 @@ console.log(sayHi(alex));
 yarn add crypto-js
 ```
 
-- import `crypto-js` and Block Structure를 `class`로 선언
+- import `crypto-js`
 
 ```typescript
 import * as CryptoJS from 'crypto-js';
+```
 
+- Block `class` 선언
+
+```typescript
 // Block Structure
 class Block {
   public index: number;
@@ -205,6 +209,7 @@ class Block {
   public data: string;
   public timestamp: number;
 
+  // instance 생성 없이 class name으로 바로 접근 가능한 static method
   static calculateBlockHash = (
     index: number,
     previousHash: string,
@@ -212,6 +217,13 @@ class Block {
     timestamp: number
   ): string =>
     CryptoJS.SHA256(index + previousHash + data + timestamp).toString();
+
+  static validateStructure = (block: Block): boolean =>
+    typeof block.index === 'number' &&
+    typeof block.hash === 'string' &&
+    typeof block.previousHash === 'string' &&
+    typeof block.data === 'string' &&
+    typeof block.timestamp === 'number';
 
   constructor(
     index: number,
@@ -229,12 +241,22 @@ class Block {
 }
 ```
 
-- Block instance and Functions for blockchain manipulate
+- Timestamp and Hash
 
 ```typescript
 const getNewTimestamp = (): number => Math.round(new Date().getTime() / 1000);
+const getHashForBlock = (block: Block): string =>
+  Block.calculateBlockHash(
+    block.index,
+    block.previousHash,
+    block.data,
+    block.timestamp
+  );
+```
 
-// first Block instance
+- Create first Block instance
+
+```typescript
 const genesisBlock: Block = new Block(
   0,
   Block.calculateBlockHash(0, '', 'First Block', getNewTimestamp()),
@@ -242,7 +264,11 @@ const genesisBlock: Block = new Block(
   'First Block',
   getNewTimestamp()
 );
+```
 
+- blockchain Array and creating Block
+
+```typescript
 let blockchain: Block[] = [genesisBlock];
 const getLatestBlock = (): Block => blockchain[blockchain.length - 1];
 const createNewBlock = (data: string): Block => {
@@ -264,9 +290,35 @@ const createNewBlock = (data: string): Block => {
   );
   return newBlock;
 };
+```
+
+## 6. Validating Block Structure
+
+```typescript
+const isBlockValid = (candidateBlock: Block, previousBlock: Block): boolean => {
+  if (!Block.validateStructure(candidateBlock)) {
+    return false;
+  } else if (candidateBlock.index !== previousBlock.index + 1) {
+    return false;
+  } else if (candidateBlock.previousHash !== previousBlock.hash) {
+    return false;
+  } else if (getHashForBlock(candidateBlock) !== candidateBlock.hash) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+const addBlock = (candidateBlock: Block): void => {
+  if (isBlockValid(candidateBlock, getLatestBlock())) {
+    blockchain.push(candidateBlock);
+  }
+};
+
+addBlock(createNewBlock('Hello'));
+addBlock(createNewBlock('Bye Bye'));
 
 const getBlockchain = (): Block[] => blockchain;
 
-blockchain.push(createNewBlock('hello'));
-console.log(blockchain);
+console.log(getBlockchain());
 ```
