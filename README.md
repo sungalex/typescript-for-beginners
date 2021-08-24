@@ -2,7 +2,9 @@
 
 Learning Typescript by making a Blockchain with it
 
-## 1. Inintial setup
+## 1. Typescript setup
+
+- Inintial setup
 
 ```zsh
 git init
@@ -16,8 +18,6 @@ git push origin master
 ```
 
 - `.gitignore` 파일 생성: `gitignore extension for vsc`을 이용한 생성 (`^⌘P` -> Add gitignore -> Node.gitignore)
-
-## 2. Typescript setup
 
 - typescript 설치
 
