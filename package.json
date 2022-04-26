@@ -13,9 +13,12 @@
   },
   "scripts": {
     "build": "tsc",
-    "start": "node build/index.js"
+    "start": "node build/index.js",
+    "dev": "nodemon --exec node src/index.ts"
   },
   "devDependencies": {
-    "@types/crypto-js": "^4.1.1"
+    "@types/crypto-js": "^4.1.1",
+    "nodemon": "^2.0.15",
+    "ts-node": "^10.7.0"
   }
 }
