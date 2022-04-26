@@ -1,8 +1,8 @@
-# TypeChain
+# Typescript for Beginner
 
-Learning Typescript by making a Blockchain with it. (Updated: April, 2022)
+Learning Typescript by making a Blockchain with it.
 
-- 노마드코더 강의 : [Typescript로 블록체인 만들기](https://nomadcoders.co/typescript-for-beginners)
+- 노마드코더 강의 : [Typescript로 블록체인 만들기](https://nomadcoders.co/typescript-for-beginners) (Updated: April, 2022)
 
 ## 1. Typescript setup
 
@@ -12,7 +12,7 @@ Learning Typescript by making a Blockchain with it. (Updated: April, 2022)
 git init
 git remote add origin https://github.com/sungalex/typechain
 
-yarn init    # 대화식 세션을 통해 package.json 파일을 작성
+yarn init    # 대화식 세션을 통해 package.json 파일을 작성 (또는 npm init)
 
 git add *
 git commit -m "Initial commit"
@@ -25,6 +25,8 @@ git push origin master
 
 ```zsh
 yarn add global typescript
+or
+npm install -g typescript
 ```
 
 - create tsconfig.json
@@ -32,11 +34,10 @@ yarn add global typescript
 ```JSON
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "target": "ES2015",
-    "sourceMap": true
+    "target": "ES6",
+    "outDir": "build",
   },
-  "include": ["index.ts"],
+  "include": ["src"],
   "exclude": ["node_modules"]
 }
 ```
@@ -49,7 +50,7 @@ yarn add global typescript
 tsc
 ```
 
-- `tsc` 컴파일 및 `index.js` 파일 실행을 자동화 하기 위해 `package.json`에 설정 추가 (`yarn start`로 실행)
+- `tsc` 컴파일 및 `index.js` 파일 실행을 자동화 하기 위해 `package.json`에 설정 추가 (`yarn start` 또는 `npm run start`로 실행)
 
 ```JSON
 {
@@ -68,19 +69,19 @@ tsc
 
   ```zsh
   yarn add tsc-watch --dev
+  or
+  npm i tsc-watch -D
   ```
 
-  - src(ts 파일), dist(js 파일) 폴더 생성 및 `tsconfig.json` 설정 수정
+  - src(ts 파일) 및 `tsconfig.json` 설정 수정
 
   ```JSON
   {
     "compilerOptions": {
-      "module": "commonjs",
-      "target": "ES2015",
-      "sourceMap": true,
-      "outDir": "dist"    // 컴파일 결과(js 파일)를 저장할 폴더 지정
+      "target": "ES6",
+      "outDir": "build"    // 컴파일 결과(js 파일)를 저장할 폴더 지정
     },
-    "include": ["src/**/*"],    // ts 파일이 있는 폴더 지정(모든 파일)
+    "include": ["src"],    // ts 파일이 있는 폴더 지정(모든 파일)
     "exclude": ["node_modules"]
   }
   ```
