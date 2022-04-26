@@ -1,6 +1,6 @@
 # TypeChain
 
-Learning Typescript by making a Blockchain with it
+Learning Typescript by making a Blockchain with it. (Updated: April, 2022)
 
 - 노마드코더 강의 : [Typescript로 블록체인 만들기](https://nomadcoders.co/typescript-for-beginners)
 
@@ -105,7 +105,7 @@ const sayHi = (name: string, age: number, gender: string): string => {
   return `Hello ${name}, you are ${age}, you are ${gender}`;
 };
 
-console.log(sayHi('Alex', 54, 'male'));
+console.log(sayHi("Alex", 54, "male"));
 
 /**
  * ECMAScript 2015와 마찬가지로 TypeScript는 최상위 수준의 import
@@ -132,9 +132,9 @@ interface Human {
 
 // person Object 생성
 const person = {
-  name: 'Alex',
+  name: "Alex",
   age: 54,
-  gender: 'male',
+  gender: "male",
 };
 
 /**
@@ -170,7 +170,7 @@ class Human {
 }
 
 // person Object(instance) 생성
-const alex = new Human('Alex', 54, 'male');
+const alex = new Human("Alex", 54, "male");
 
 /**
  * 변수명과 함수명에 Type을 지정하여 ts가 자동으로 오류를 체크하도록 함
@@ -195,7 +195,7 @@ yarn add crypto-js
 - import `crypto-js`
 
 ```typescript
-import * as CryptoJS from 'crypto-js';
+import * as CryptoJS from "crypto-js";
 ```
 
 - Block `class` 선언
@@ -219,11 +219,11 @@ class Block {
     CryptoJS.SHA256(index + previousHash + data + timestamp).toString();
 
   static validateStructure = (block: Block): boolean =>
-    typeof block.index === 'number' &&
-    typeof block.hash === 'string' &&
-    typeof block.previousHash === 'string' &&
-    typeof block.data === 'string' &&
-    typeof block.timestamp === 'number';
+    typeof block.index === "number" &&
+    typeof block.hash === "string" &&
+    typeof block.previousHash === "string" &&
+    typeof block.data === "string" &&
+    typeof block.timestamp === "number";
 
   constructor(
     index: number,
@@ -259,9 +259,9 @@ const getHashForBlock = (block: Block): string =>
 ```typescript
 const genesisBlock: Block = new Block(
   0,
-  Block.calculateBlockHash(0, '', 'Root Block', getNewTimestamp()),
-  '',
-  'Root Block',
+  Block.calculateBlockHash(0, "", "Root Block", getNewTimestamp()),
+  "",
+  "Root Block",
   getNewTimestamp()
 );
 ```
@@ -316,9 +316,9 @@ const addBlock = (candidateBlock: Block): void => {
   }
 };
 
-createNewBlock('Second Block');
-createNewBlock('Third Block');
-createNewBlock('Fourth Block');
+createNewBlock("Second Block");
+createNewBlock("Third Block");
+createNewBlock("Fourth Block");
 
 const getBlockchain = (): Block[] => blockchain;
 
