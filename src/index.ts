@@ -1,4 +1,4 @@
-import * as CryptoJS from 'crypto-js';
+import { SHA256 } from "crypto-js";
 
 // Block Structure
 class Block {
@@ -8,15 +8,14 @@ class Block {
     previousHash: string,
     data: string,
     timestamp: number
-  ): string =>
-    CryptoJS.SHA256(index + previousHash + data + timestamp).toString();
+  ): string => SHA256(index + previousHash + data + timestamp).toString();
 
   static validateStructure = (block: Block): boolean =>
-    typeof block.index === 'number' &&
-    typeof block.hash === 'string' &&
-    typeof block.previousHash === 'string' &&
-    typeof block.data === 'string' &&
-    typeof block.timestamp === 'number';
+    typeof block.index === "number" &&
+    typeof block.hash === "string" &&
+    typeof block.previousHash === "string" &&
+    typeof block.data === "string" &&
+    typeof block.timestamp === "number";
 
   public index: number;
   public hash: string;
@@ -52,9 +51,9 @@ const getHashForBlock = (block: Block): string =>
 // Create first Block instance
 const genesisBlock: Block = new Block(
   0,
-  Block.calculateBlockHash(0, '', 'First Block', getNewTimestamp()),
-  '',
-  'First Block',
+  Block.calculateBlockHash(0, "", "First Block", getNewTimestamp()),
+  "",
+  "First Block",
   getNewTimestamp()
 );
 
@@ -103,9 +102,9 @@ const addBlock = (candidateBlock: Block): void => {
   }
 };
 
-createNewBlock('Second Block');
-createNewBlock('Third Block');
-createNewBlock('Fourth Block');
+createNewBlock("Second Block");
+createNewBlock("Third Block");
+createNewBlock("Fourth Block");
 
 const getBlockchain = (): Block[] => blockchain;
 

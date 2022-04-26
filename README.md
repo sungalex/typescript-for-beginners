@@ -185,7 +185,50 @@ const sayHi = (person: Human): string => {
 console.log(sayHi(alex));
 ```
 
-## 5. Blockchain Creating a Block
+## 5. Type Definition File
+
+Type Declaration File은 Javascript로 작성된 `.js` 파일을 Typescript 파일 처럼 `.ts`에서 import 하여 사용할 수 있도록 한다.
+
+- `tsconfig.json` 파일에 `"lib": ["ES6", "DOM"]` 처럼, Typescript가 제공하는 대상 런타임 환경을 설명하는 번들 라이브러리(Bundled Library) 선언 파일 세트(Type Definition Files)를 선언하여 사용할 수 있다.
+
+```JSON
+{
+  "compilerOptions": {
+    "lib": ["ES6", "DOM"],
+  },
+}
+```
+
+- 대부분의 Javascript 패키지는 `npm -i -D @types/[package_name]` 명령으로 Type Declaration File을 설치해서 사용할 수 있다.
+
+- `[package_name].d.ts`, `[file_name].d.ts` 처럼 `.d.ts` 파일에 직접 Declaration을 정의하여 사용할 수도 있다.
+
+- Typescript에서 `.d.ts` 없이도 Javascript 파일을 사용(Typescript가 Type을 추론) 하도록 허용 하려면, `tsconfig.json` 파일에 `allowJs`를 `true`로 설정한다.
+
+```JSON
+{
+  "compilerOptions": {
+    "allowJs": true,
+  }
+}
+```
+
+- 아래와 같이 Javascript 파일 첫 행에 `// @ts-check`를 추가하고, [`JSDoc`](https://jsdoc.app/about-getting-started.html) API documentation generator 문법(주석을 이용한 Document 작성 문법) 형식으로 Comments를 작성하면, Typescript 파일에서 Javascript 파일에 대한 Type Definition을 사용할 수 있다.
+
+```javascript
+// @ts-check
+/**
+ * Initializes the project
+ * @param {object} config
+ * @param {string} config.url
+ * @returns boolean
+ */
+export function init(config) {
+  return true;
+}
+```
+
+## 6. Blockchain Creating a Block
 
 - Hash 생성을 위한 `crypto-js` 패키지 설치
 
@@ -294,7 +337,7 @@ const createNewBlock = (data: string): Block => {
 };
 ```
 
-## 6. Validating Block Structure
+## 7. Validating Block Structure
 
 ```typescript
 const isBlockValid = (candidateBlock: Block, previousBlock: Block): boolean => {

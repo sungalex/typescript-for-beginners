@@ -2,8 +2,12 @@
   "compilerOptions": {
     "outDir": "build",
     "target": "ES6",
-    "module": "CommonJS"
+    "lib": ["ES6", "DOM"],
+    "module": "CommonJS",
+    "strict": true, // strict Type Check
+    "allowJs": true, // allow using Javascript Code
+    "esModuleInterop": true
   },
-  "include": ["src"],
+  "include": ["src", "src/myPackage.d.ts"],
   "exclude": ["node_modules"]
 }
