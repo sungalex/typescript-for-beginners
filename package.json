@@ -7,17 +7,16 @@
   "author": "sungalex <cloudallera@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "crypto-js": "^4.1.1",
+    "crypto": "^1.0.1",
     "global": "^4.4.0",
     "typescript": "^4.3.5"
   },
   "scripts": {
     "build": "tsc",
     "start": "node build/index.js",
-    "dev": "nodemon --exec node src/index.ts"
+    "dev": "nodemon --exec ts-node src/index.ts"
   },
   "devDependencies": {
-    "@types/crypto-js": "^4.1.1",
     "nodemon": "^2.0.15",
     "ts-node": "^10.7.0"
   }

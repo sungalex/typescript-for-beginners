@@ -1,113 +1,78 @@
-import { SHA256 } from "crypto-js";
+import crypto from "crypto";
 
-// Block Structure
-class Block {
-  // instance 생성 없이 class name으로 바로 접근 가능한 static method
-  static calculateBlockHash = (
+interface BlockShape {
+  index: number;
+  timestamp: number;
+  prevHash: string;
+  data: string;
+  hash: string;
+}
+
+class Block implements BlockShape {
+  public hash: string;
+  constructor(
+    public index: number,
+    public timestamp: number,
+    public prevHash: string,
+    public data: string
+  ) {
+    this.hash = Block.calculateHash(index, timestamp, prevHash, data);
+  }
+  static calculateHash(
     index: number,
-    previousHash: string,
-    data: string,
-    timestamp: number
-  ): string => SHA256(index + previousHash + data + timestamp).toString();
-
+    timestamp: number,
+    prevHash: string,
+    data: string
+  ) {
+    const toHash = `${index}${timestamp}${prevHash}${data}`;
+    return crypto.createHash("sha256").update(toHash).digest("hex");
+  }
   static validateStructure = (block: Block): boolean =>
     typeof block.index === "number" &&
-    typeof block.hash === "string" &&
-    typeof block.previousHash === "string" &&
+    typeof block.timestamp === "number" &&
+    typeof block.prevHash === "string" &&
     typeof block.data === "string" &&
-    typeof block.timestamp === "number";
+    typeof block.hash === "string";
+}
 
-  public index: number;
-  public hash: string;
-  public previousHash: string;
-  public data: string;
-  public timestamp: number;
-
-  constructor(
-    index: number,
-    hash: string,
-    previousHash: string,
-    data: string,
-    timestamp: number
-  ) {
-    this.index = index;
-    this.hash = hash;
-    this.previousHash = previousHash;
-    this.data = data;
-    this.timestamp = timestamp;
+class Blockchain {
+  private blocks: Block[];
+  constructor() {
+    this.blocks = [];
+  }
+  private getLatestBlock() {
+    return this.blocks[this.blocks.length - 1];
+  }
+  private getPrevHash() {
+    if (this.blocks.length === 0) return "";
+    return this.getLatestBlock().hash;
+  }
+  public addBlock(data: string) {
+    const newBlock = new Block(
+      this.blocks.length,
+      getNewTimestamp(),
+      this.getPrevHash(),
+      data
+    );
+    if (Block.validateStructure(newBlock)) {
+      this.blocks.push(newBlock);
+    } else {
+      console.log("Block Structure is invalid.");
+    }
+  }
+  public getBlocks() {
+    return [...this.blocks];
   }
 }
 
-// Timestamp and Hash
-const getNewTimestamp = (): number => Math.round(new Date().getTime() / 1000);
-const getHashForBlock = (block: Block): string =>
-  Block.calculateBlockHash(
-    block.index,
-    block.previousHash,
-    block.data,
-    block.timestamp
-  );
+const getNewTimestamp = () => new Date().getTime();
 
-// Create first Block instance
-const genesisBlock: Block = new Block(
-  0,
-  Block.calculateBlockHash(0, "", "First Block", getNewTimestamp()),
-  "",
-  "First Block",
-  getNewTimestamp()
-);
+const blockchain = new Blockchain();
+blockchain.addBlock("First Block");
+blockchain.addBlock("Second Block");
+blockchain.addBlock("Third Block");
+blockchain.addBlock("Fourth Block");
 
-// blockchain Array and creating Block
-let blockchain: Block[] = [genesisBlock];
-const getLatestBlock = (): Block => blockchain[blockchain.length - 1];
-const createNewBlock = (data: string): Block => {
-  const previousBlock: Block = getLatestBlock();
-  const newIndex: number = previousBlock.index + 1;
-  const newTimestamp: number = getNewTimestamp();
-  const newHash: string = Block.calculateBlockHash(
-    newIndex,
-    previousBlock.hash,
-    data,
-    newTimestamp
-  );
-  const newBlock: Block = new Block(
-    newIndex,
-    newHash,
-    previousBlock.hash,
-    data,
-    newTimestamp
-  );
-  addBlock(newBlock);
-  return newBlock;
-};
-
-// Validate Block
-const isBlockValid = (candidateBlock: Block, previousBlock: Block): boolean => {
-  if (!Block.validateStructure(candidateBlock)) {
-    return false;
-  } else if (candidateBlock.index !== previousBlock.index + 1) {
-    return false;
-  } else if (candidateBlock.previousHash !== previousBlock.hash) {
-    return false;
-  } else if (getHashForBlock(candidateBlock) !== candidateBlock.hash) {
-    return false;
-  } else {
-    return true;
-  }
-};
-
-const addBlock = (candidateBlock: Block): void => {
-  if (isBlockValid(candidateBlock, getLatestBlock())) {
-    blockchain.push(candidateBlock);
-  }
-};
-
-createNewBlock("Second Block");
-createNewBlock("Third Block");
-createNewBlock("Fourth Block");
-
-const getBlockchain = (): Block[] => blockchain;
-
-console.log(getBlockchain());
+console.log(blockchain.getBlocks());
 
 export {};
