@@ -1,65 +1,56 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const CryptoJS = require("crypto-js");
-// Block Structure
+const crypto_1 = __importDefault(require("crypto"));
 class Block {
-    constructor(index, hash, previousHash, data, timestamp) {
+    constructor(index, timestamp, prevHash, data) {
         this.index = index;
-        this.hash = hash;
-        this.previousHash = previousHash;
-        this.data = data;
         this.timestamp = timestamp;
+        this.prevHash = prevHash;
+        this.data = data;
+        this.hash = Block.calculateHash(index, timestamp, prevHash, data);
+    }
+    static calculateHash(index, timestamp, prevHash, data) {
+        const toHash = `${index}${timestamp}${prevHash}${data}`;
+        return crypto_1.default.createHash("sha256").update(toHash).digest("hex");
     }
 }
-// instance 생성 없이 class name으로 바로 접근 가능한 static method
-Block.calculateBlockHash = (index, previousHash, data, timestamp) => CryptoJS.SHA256(index + previousHash + data + timestamp).toString();
-Block.validateStructure = (block) => typeof block.index === 'number' &&
-    typeof block.hash === 'string' &&
-    typeof block.previousHash === 'string' &&
-    typeof block.data === 'string' &&
-    typeof block.timestamp === 'number';
-// Timestamp and Hash
-const getNewTimestamp = () => Math.round(new Date().getTime() / 1000);
-const getHashForBlock = (block) => Block.calculateBlockHash(block.index, block.previousHash, block.data, block.timestamp);
-// Create first Block instance
-const genesisBlock = new Block(0, Block.calculateBlockHash(0, '', 'First Block', getNewTimestamp()), '', 'First Block', getNewTimestamp());
-// blockchain Array and creating Block
-let blockchain = [genesisBlock];
-const getLatestBlock = () => blockchain[blockchain.length - 1];
-const createNewBlock = (data) => {
-    const previousBlock = getLatestBlock();
-    const newIndex = previousBlock.index + 1;
-    const newTimestamp = getNewTimestamp();
-    const newHash = Block.calculateBlockHash(newIndex, previousBlock.hash, data, newTimestamp);
-    const newBlock = new Block(newIndex, newHash, previousBlock.hash, data, newTimestamp);
-    addBlock(newBlock);
-    return newBlock;
-};
-// Validate Block
-const isBlockValid = (candidateBlock, previousBlock) => {
-    if (!Block.validateStructure(candidateBlock)) {
-        return false;
+Block.validateStructure = (block) => typeof block.index === "number" &&
+    typeof block.timestamp === "number" &&
+    typeof block.prevHash === "string" &&
+    typeof block.data === "string" &&
+    typeof block.hash === "string";
+class Blockchain {
+    constructor() {
+        this.blocks = [];
     }
-    else if (candidateBlock.index !== previousBlock.index + 1) {
-        return false;
+    getLatestBlock() {
+        return this.blocks[this.blocks.length - 1];
     }
-    else if (candidateBlock.previousHash !== previousBlock.hash) {
-        return false;
+    getPrevHash() {
+        if (this.blocks.length === 0)
+            return "";
+        return this.getLatestBlock().hash;
     }
-    else if (getHashForBlock(candidateBlock) !== candidateBlock.hash) {
-        return false;
+    addBlock(data) {
+        const newBlock = new Block(this.blocks.length, getNewTimestamp(), this.getPrevHash(), data);
+        if (Block.validateStructure(newBlock)) {
+            this.blocks.push(newBlock);
+        }
+        else {
+            console.log("Block Structure is invalid.");
+        }
     }
-    else {
-        return true;
+    getBlocks() {
+        return [...this.blocks];
     }
-};
-const addBlock = (candidateBlock) => {
-    if (isBlockValid(candidateBlock, getLatestBlock())) {
-        blockchain.push(candidateBlock);
-    }
-};
-createNewBlock('Second Block');
-createNewBlock('Third Block');
-createNewBlock('Fourth Block');
-const getBlockchain = () => blockchain;
-console.log(getBlockchain());
+}
+const getNewTimestamp = () => new Date().getTime();
+const blockchain = new Blockchain();
+blockchain.addBlock("First Block");
+blockchain.addBlock("Second Block");
+blockchain.addBlock("Third Block");
+blockchain.addBlock("Fourth Block");
+console.log(blockchain.getBlocks());
