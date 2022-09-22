@@ -171,13 +171,13 @@ function hello(name: string | number) {
 - 함수의 인자 타입과 리턴 타입을 Call Signatures 라고 함 (함수가 어떻게 호출되고 무엇을 리턴하는지를 정의함)
 
 ```ts
-type Add = (a: number, b: number) => number;
+type Add = (a: number, b: number) => number; // Call Signatures 선언
 
 const add: Add = (a, b) => a + b;
 add(1, 2);
 ```
 
-- 위에 선언한 Call Signatures는 아래와 같이 작성해도 됨
+- 위에 선언한 Call Signatures 선언은 아래와 같이 작성해도 됨
 
 ```ts
 type Add = {
@@ -203,16 +203,26 @@ const b = superPrint(["a", 1, true]); // b type => string | number | boolean
 - Call Signatures에 여러 개의 Generics를 사용하면 인자의 순서대로 매핑 함
 
 ```ts
+type IndexPrint = {
+  <T, V>(arr: T[], index: V): T; // T는 함수의 첫번째 인자 타입, V는 두번째 인자 타입
+};
+```
+
+- `T[]` 대신 `Array<T>`를 이용한 Generics 선언도 가능함
+
+```ts
+// 배열에 인자 추가 하는 함수 콜 시그니처 선언
 type Push = {
-  <T, V>(arr: T[], item: V): T | V;
+  <T, V>(arr: Array<T | V>, item: V): Array<T | V>;
 };
 
-const add: Add = (arr, item) => {
+// 배열에 인자 추가 하는 함수 구현
+const add: Push = (arr, item) => {
   arr.push(item);
   return arr;
 };
-const arr1 = ["a", 1]; // T는 string | number
-console.log(add(arr1, true)); // V는 boolean
+const arr1 = ["a", 1];
+console.log(add(arr1, true)); // T는 string | number | boolean, V는 boolean
 ```
 
 ## 3. Interfaces on Typescript
