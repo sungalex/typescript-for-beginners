@@ -187,9 +187,33 @@ type Add = {
 
 - 함수가 서로 다른 여러 개의 Call Signatures를 가지고 있을 때 Overloading이 발생함
 
-- Polymorphism
+- Polymorphism and Generics : Generics는 type placeholder 역할을 함(타입을 일종의 변수와 같이 취급). call signatures를 만들 때 인자 타입을 모르거나 여러 가지 타입을 지원하기 위해 generics을 사용함. 함수가 호출될 때 실제 타입이 결정됨. call signatures에 placeholder를 사용하면 polymorphism(다형성)을 가지게 됨(인자에 따라 다른 타입으로 동작함). 제네릭은 선언 시점이 아니라 생성 시점에 타입을 명시하여 하나의 타입만이 아닌 다양한 타입을 사용할 수 있도록 하는 기법임
 
-- Generics
+```ts
+// Generics 타입으로 Call Signatures 선언
+type SuperPrint = {
+  <TypePlaceholder>(arr: TypePlaceholder[]): TypePlaceholder;
+};
+
+const superPrint: SuperPrint = (arr) => arr[0]; // 함수 정의
+const a = superPrint([1, 2, 3, 4]); // a type => number
+const b = superPrint(["a", 1, true]); // b type => string | number | boolean
+```
+
+- Call Signatures에 여러 개의 Generics를 사용하면 인자의 순서대로 매핑 함
+
+```ts
+type Push = {
+  <T, V>(arr: T[], item: V): T | V;
+};
+
+const add: Add = (arr, item) => {
+  arr.push(item);
+  return arr;
+};
+const arr1 = ["a", 1]; // T는 string | number
+console.log(add(arr1, true)); // V는 boolean
+```
 
 ## 3. Interfaces on Typescript
 
