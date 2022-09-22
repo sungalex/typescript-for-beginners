@@ -12,14 +12,14 @@ Learning Typescript by making a Blockchain with it.
 git init
 git remote add origin https://github.com/sungalex/typechain
 
+# .gitignore 파일 생성("gitignore extension for vsc"을 이용한 생성) : "^⌘P" -> Add gitignore -> Node.gitignore
+
 yarn init    # 대화식 세션을 통해 package.json 파일을 작성 (또는 npm init)
 
 git add *
 git commit -m "Initial commit"
 git push origin master
 ```
-
-- `.gitignore` 파일 생성: `gitignore extension for vsc`을 이용한 생성 (`^⌘P` -> Add gitignore -> Node.gitignore)
 
 - typescript 설치
 
@@ -98,23 +98,47 @@ tsc
 
 ## 2. Types in Typescript
 
+- 변수명과 함수명에 Type을 지정하여 TypeScript가 자동으로 오류를 체크하도록 함
+
 ```typescript
-/**
- * 변수명과 함수명에 Type을 지정하여 ts가 자동으로 오류를 체크하도록 함
- */
 const sayHi = (name: string, age: number, gender: string): string => {
   return `Hello ${name}, you are ${age}, you are ${gender}`;
 };
 
 console.log(sayHi("Alex", 54, "male"));
 
-/**
- * ECMAScript 2015와 마찬가지로 TypeScript는 최상위 수준의 import
- * 혹은 export가 포함된 모든 파일을 모듈로 간주합니다.
- * 각 모듈은 선택적으로 default export를 export 할 수 있습니다.
- * 모듈당 하나의 default export만 가능합니다.
- */
 export {};
+```
+
+- ECMAScript 2015와 마찬가지로 TypeScript는 최상위 수준의 import 혹은 export가 포함된 모든 파일을 모듈로 간주합니다. 각 모듈은 선택적으로 default export를 export 할 수 있습니다. 모듈당 하나의 default export만 가능합니다.
+
+- `type` Alias를 정의해서 type을 재사용 가능 (거의 모든 것에 type을 정의할 수 있음)
+
+```ts
+// type 명칭은 대문자로 시작
+type Player = {
+  name: string;
+  age?: number; // "?"을 사용하면 Optianal 속성을 나타냄
+};
+
+const alex: Player = {
+  name: "alex",
+};
+
+// Argument type 지정, function return type 지정
+function playerMaker(name: string): Player {
+  return {
+    name: name,
+  };
+}
+const nico = playerMaker("nico");
+nico.age = 12;
+```
+
+- 위의 `playerMaker` 함수는 아래와 같이 Arrow function 형태로 작성할 수도 있음 (`name: name`과 같이 key, value 명칭이 동일한 경우, `name`으로 축약해서 사용 가능)
+
+```ts
+const playMaker = (name: string): Player => ({ name });
 ```
 
 ## 3. Interfaces on Typescript
@@ -152,7 +176,7 @@ console.log(sayHi(person));
 
 - `ts`의 `interface`는 `js`로 컴파일 되지는 않음
 
-## 4. Classes on Typescript - part One
+## 4. Classes on Typescript
 
 ```typescript
 /**
