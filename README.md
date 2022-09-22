@@ -150,6 +150,22 @@ const playMaker = (name: string): Player => ({ name });
 const player: [string, number, boolean] = ["alex", 54, true];
 ```
 
+- type을 `any`로 지정하면 typescript가 타입을 체크하지 않음. 어떤 타입인지 명확하지 않을 때는 `unknown` 타입을 지정할 수 있음. `any` 또는 `unknown` 타입으로 지정한 Object는 `typeof`로 타입을 확인 후 사용해야 함
+
+- 아무것도 리턴하지 않는 함수의 리턴 타입은 `void` 임. 함수가 절대 리턴하지 않는 영역은 타입이 `never` 임
+
+```ts
+function hello(name: string | number) {
+  if (typeof name === "string") {
+    name;
+  } else if (typeof name === "number") {
+    name;
+  } else {
+    name; // 함수의 인자는 "string" 또는 "number" 이기 때문에 이문장은 실행되지 않음 => "never" type 임
+  }
+}
+```
+
 ## 3. Interfaces on Typescript
 
 `interface` 선언을 이용하여 `Object` 이름 지어주기
