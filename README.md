@@ -118,7 +118,7 @@ export {};
 // type 명칭은 대문자로 시작
 type Player = {
   name: string;
-  age?: number; // "?"을 사용하면 Optianal 속성을 나타냄
+  age?: number; // "?"을 사용하면 Optianal 속성을 나타냄 ("number | undefined"와 동일함)
 };
 
 const alex: Player = {
@@ -139,6 +139,15 @@ nico.age = 12;
 
 ```ts
 const playMaker = (name: string): Player => ({ name });
+```
+
+- type에 `readonly` 키워드를 추가하면, 변경이 불가한 immutable 속성을 지정할 수 있음(javascript에는 없는 속성임)
+
+- 최소한의 길이와 각각의 인자가 특정 타입을 가진 Array를 `Tuple`이라 함 (Tuple과 readonly를 함께 사용 가능)
+
+```ts
+// 최소 길이가 3이고, 각 인자는 string, number, boolean type인 배열 선언
+const player: [string, number, boolean] = ["alex", 54, true];
 ```
 
 ## 3. Interfaces on Typescript
