@@ -166,6 +166,31 @@ function hello(name: string | number) {
 }
 ```
 
+## 3. Functions
+
+- 함수의 인자 타입과 리턴 타입을 Call Signatures 라고 함 (함수가 어떻게 호출되고 무엇을 리턴하는지를 정의함)
+
+```ts
+type Add = (a: number, b: number) => number;
+
+const add: Add = (a, b) => a + b;
+add(1, 2);
+```
+
+- 위에 선언한 Call Signatures는 아래와 같이 작성해도 됨
+
+```ts
+type Add = {
+  (a: number, b: number): number;
+};
+```
+
+- 함수가 서로 다른 여러 개의 Call Signatures를 가지고 있을 때 Overloading이 발생함
+
+- Polymorphism
+
+- Generics
+
 ## 3. Interfaces on Typescript
 
 `interface` 선언을 이용하여 `Object` 이름 지어주기
